@@ -4,18 +4,12 @@ pipeline
   
   tools
   {
-    maven 'Maven_3.8.2'
+    maven 'Maven_Base'
   }
   
   triggers
   {
     pollSCM('* * * * *')
-  }
-  
-  options
-  {
-    timestamps()
-    buildDiscarder(logRotator(artifactDaysToKeepStr: '', artifactNumToKeepStr: '5', daysToKeepStr: '', numToKeepStr: '5'))
   }
   
   stages
@@ -61,24 +55,6 @@ pipeline
           sh "scp -o StrictHostKeyChecking=no target/maven-web-application.war ec2-user@35.154.190.162:/opt/apache-tomcat-9.0.50/webapps/"
         }
       }
-    }
-  }
-
-post
-{
-  success
-  {
-    emailext to: 'devopstrainingblr@gmail.com,mithuntechnologies@yahoo.com',
-    subject: "Pipeline Build is Over Build # is ${env.BUILD_NUMBER} and Build Status is ${currentBuild.result}",
-    body: "Pipeline Build is Over Build # is ${env.BUILD_NUMBER} and Build Status is ${currentBuild.result}",
-    replyTo: 'devopstrainingblr@gmail.com'
-  }
-  failure
-  {
-    emailext to: 'devopstrainingblr@gmail.com,mithuntechnologies@yahoo.com',
-    subject: "Pipeline Build is Over Build # is ${env.BUILD_NUMBER} and Build Status is ${currentBuild.result}",
-    body: "Pipeline Build is Over Build # is ${env.BUILD_NUMBER} and Build Status is ${currentBuild.result}",
-    replyTo: 'devopstrainingblr@gmail.com'
     }
   }
 }
